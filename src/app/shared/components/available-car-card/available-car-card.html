@@ -1,0 +1,56 @@
+<article
+  class="bg-white rounded-2xl overflow-hidden shadow-sm border border-gray-200 hover:shadow-lg transition"
+>
+  <!-- Image -->
+  <div class="relative h-52 bg-gray-100 overflow-hidden">
+    <img
+      [src]="'/images/' + car.brand.toLowerCase() + '-' + car.model.toLowerCase() + '.png'"
+      [alt]="car.brand + ' ' + car.model"
+      class="w-full h-full object-cover"
+    />
+
+    <!-- Availability -->
+    <div
+      class="absolute top-4 right-4 flex items-center gap-2 px-3 py-1.5 rounded-full bg-green-500 text-white text-sm font-semibold shadow-md"
+    >
+      <span class="w-2 h-2 rounded-full bg-white"></span>
+
+      {{ car.availableCars }}
+      {{ car.availableCars === 1 ? 'disponible' : 'disponibles' }}
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="p-5">
+    <!-- Name -->
+    <h2 class="text-xl font-semibold text-gray-900">{{ car.brand }} {{ car.model }}</h2>
+
+    <!-- Features -->
+    <div class="mt-4 flex flex-wrap gap-2">
+      <span class="px-3 py-1.5 bg-blue-50 text-blue-700 text-sm font-medium rounded-full">
+        {{ getFuelTypeLabel() }}
+      </span>
+
+      <span class="px-3 py-1.5 bg-gray-100 text-gray-700 text-sm font-medium rounded-full">
+        {{ getTransmissionLabel() }}
+      </span>
+    </div>
+
+    <!-- Price -->
+    <div class="mt-6 flex items-end justify-between">
+      <div>
+        <span class="text-2xl font-bold text-gray-900"> {{ car.pricePerDay }} € </span>
+
+        <span class="text-sm text-gray-500"> / día </span>
+      </div>
+    </div>
+
+    <!-- Button -->
+    <button
+      type="button"
+      class="mt-5 w-full h-11 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
+    >
+      Reservar
+    </button>
+  </div>
+</article>
