@@ -1,12 +1,26 @@
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { AuthService } from './features/auth/services/auth';
 
 @Component({
   selector: 'app-root',
   imports: [RouterOutlet],
   templateUrl: './app.html',
-  styleUrl: './app.css'
+  styleUrl: './app.css',
 })
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('carrent-frontend');
+
+  constructor(private authService: AuthService) {}
+
+  ngOnInit(): void {
+    this.authService.restoreSession().subscribe({
+      next: (user) => {
+        console.log('Sesión restaurada:', user);
+      },
+      error: () => {
+        console.log('No hay sesión activa');
+      },
+    });
+  }
 }

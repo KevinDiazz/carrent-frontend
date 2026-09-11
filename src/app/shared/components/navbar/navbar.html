@@ -1,0 +1,156 @@
+<nav class="bg-white border-b border-gray-200">
+  <div class="max-w-7xl mx-auto px-6">
+    <!-- Main navbar -->
+    <div class="flex items-center justify-between h-20">
+      <!-- Logo -->
+      <a routerLink="/" class="flex items-center" (click)="closeMenu()">
+        <img src="/images/logo-estandar.png" alt="CarRent" class="h-15" />
+      </a>
+
+      <!-- Desktop navigation -->
+      <div class="hidden md:flex items-center gap-8">
+        <a routerLink="/" class="text-gray-700 hover:text-blue-600 transition"> Inicio </a>
+
+        <a routerLink="/cars" class="text-gray-700 hover:text-blue-600 transition"> Coches </a>
+
+        <a routerLink="/reservations" class="text-gray-700 hover:text-blue-600 transition">
+          Mis reservas
+        </a>
+      </div>
+
+      <!-- Desktop authentication -->
+      <div class="hidden md:flex items-center gap-3">
+        @if (currentUser) {
+          <span class="px-4 py-2 text-gray-700">
+            {{ currentUser.name }}
+          </span>
+
+          <button
+            type="button"
+            class="px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+            (click)="logout()"
+          >
+            Cerrar sesión
+          </button>
+        } @else {
+          <a routerLink="/login" class="px-4 py-2 text-gray-700 hover:text-blue-600 transition">
+            Iniciar sesión
+          </a>
+
+          <a
+            routerLink="/login"
+            class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+          >
+            Registrarse
+          </a>
+        }
+      </div>
+
+      <!-- Mobile menu button -->
+      <button
+        type="button"
+        class="md:hidden p-2 text-gray-700 hover:text-blue-600"
+        (click)="toggleMenu()"
+        aria-label="Abrir menú"
+      >
+        @if (!isMenuOpen) {
+          <!-- Hamburger -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="4" y1="6" x2="20" y2="6"></line>
+            <line x1="4" y1="12" x2="20" y2="12"></line>
+            <line x1="4" y1="18" x2="20" y2="18"></line>
+          </svg>
+        } @else {
+          <!-- Close -->
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="28"
+            height="28"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <line x1="6" y1="6" x2="18" y2="18"></line>
+            <line x1="6" y1="18" x2="18" y2="6"></line>
+          </svg>
+        }
+      </button>
+    </div>
+
+    <!-- Mobile menu -->
+    @if (isMenuOpen) {
+      <div class="md:hidden border-t border-gray-100 py-4">
+        <div class="flex flex-col gap-1">
+          <a
+            routerLink="/"
+            class="px-3 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition"
+            (click)="closeMenu()"
+          >
+            Inicio
+          </a>
+
+          <a
+            routerLink="/cars"
+            class="px-3 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition"
+            (click)="closeMenu()"
+          >
+            Coches
+          </a>
+
+          <a
+            routerLink="/reservations"
+            class="px-3 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition"
+            (click)="closeMenu()"
+          >
+            Mis reservas
+          </a>
+
+          <div class="border-t border-gray-100 my-2"></div>
+
+          @if (currentUser) {
+            <div class="px-3 py-3 text-gray-700">
+              {{ currentUser.name }}
+            </div>
+
+            <button
+              type="button"
+              class="mt-1 px-3 py-3 text-center bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 transition"
+              (click)="logout(); closeMenu()"
+            >
+              Cerrar sesión
+            </button>
+          } @else {
+            <a
+              routerLink="/login"
+              class="px-3 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition"
+              (click)="closeMenu()"
+            >
+              Iniciar sesión
+            </a>
+
+            <a
+              routerLink="/register"
+              class="mt-1 px-3 py-3 text-center bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              (click)="closeMenu()"
+            >
+              Registrarse
+            </a>
+          }
+        </div>
+      </div>
+    }
+  </div>
+</nav>

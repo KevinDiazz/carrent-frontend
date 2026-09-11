@@ -1,0 +1,12 @@
+.search-form {
+  position: relative;
+  overflow: hidden;
+}
+
+@media (max-width: 767px) {
+  .search-form {
+    background-image: url('/images/fondo-login.jpg');
+    background-size: cover;
+    background-position: center;
+  }
+}
