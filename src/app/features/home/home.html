@@ -75,7 +75,13 @@
           <div class="mt-6 flex justify-center">
             <button
               type="button"
-              (click)="searchCars(pickupOffice.value, pickupDate.value, returnDate.value)"
+              (click)="
+                searchCars(
+                  pickupOffice.value,
+                  pickupDate.value,
+                  returnDate.value
+                )
+              "
               class="w-full md:w-auto px-8 h-12 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition"
             >
               Buscar coches
