@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
 import { CarAvailability } from '../../../features/cars/models/car-availability.model';
-
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-available-car-card',
   imports: [],
@@ -10,6 +10,22 @@ import { CarAvailability } from '../../../features/cars/models/car-availability.
 export class AvailableCarCard {
   @Input({ required: true })
   car!: CarAvailability;
+  @Input({ required: true })
+  officeId!: string;
+
+  @Input({ required: true })
+  startDate!: string;
+
+  @Input({ required: true })
+  endDate!: string;
+
+  @Input({ required: true })
+  pickupTime!: string;
+
+  @Input({ required: true })
+  returnTime!: string;
+
+  constructor(private router: Router) {}
 
   getFuelTypeLabel(): string {
     const fuelTypes: Record<string, string> = {
@@ -28,5 +44,20 @@ export class AvailableCarCard {
     };
 
     return transmissions[this.car.transmission] ?? this.car.transmission;
+  }
+
+  reserve(): void {
+    this.router.navigate(['/booking/confirm'], {
+      state: {
+        booking: {
+          car: this.car,
+          officeId: this.officeId,
+          startDate: this.startDate,
+          endDate: this.endDate,
+          pickupTime: this.pickupTime,
+          returnTime: this.returnTime,
+        },
+      },
+    });
   }
 }
