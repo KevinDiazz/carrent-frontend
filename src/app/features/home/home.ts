@@ -20,6 +20,8 @@ export class Home {
         officeId,
         startDate,
         endDate,
+        pickupTime: '09:00',
+        returnTime: '21:00',
       },
     });
   }
