@@ -24,6 +24,7 @@ export class CarList implements OnInit {
     endDate: new FormControl('', Validators.required),
   });
   filtersOpen = signal(false);
+  searchError: string = '';
   constructor(
     private carService: CarService,
     private route: ActivatedRoute,
@@ -38,7 +39,6 @@ export class CarList implements OnInit {
       if (!officeId || !startDate || !endDate) {
         return;
       }
-
       this.searchForm.patchValue({
         officeId,
         startDate,
@@ -72,17 +72,33 @@ export class CarList implements OnInit {
   });
 
   searchCars(): void {
-    if (this.searchForm.invalid) {
+    this.searchError = '';
+
+    const officeId = this.searchForm.value.officeId;
+    const startDate = this.searchForm.value.startDate;
+    const endDate = this.searchForm.value.endDate;
+
+    if (!officeId || !startDate || !endDate) {
       this.searchForm.markAllAsTouched();
+      this.searchError = 'Selecciona una oficina y completa las fechas.*';
       return;
     }
+    const today = new Date().toISOString().split('T')[0];
 
-    const officeId = Number(this.searchForm.value.officeId);
-    const startDate = this.searchForm.value.startDate!;
-    const endDate = this.searchForm.value.endDate!;
+    if (startDate < today) {
+      this.searchError = 'La fecha de recogida no puede ser anterior a hoy.*';
+      return;
+    }
+    if (endDate <= startDate) {
+      this.searchError = 'La fecha de devolución debe ser posterior a la fecha de recogida.*';
+      return;
+    }
+    const officeIdNumber = Number(officeId);
+
     this.pickupTime = '09:00';
     this.returnTime = '21:00';
-    this.carService.getAvailableCars(startDate, endDate, officeId).subscribe({
+
+    this.carService.getAvailableCars(startDate, endDate, officeIdNumber).subscribe({
       next: (cars) => {
         this.cars.set(cars);
       },

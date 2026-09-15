@@ -9,9 +9,25 @@ import { Router } from '@angular/router';
   styleUrl: './home.css',
 })
 export class Home {
+  searchError: string = '';
+
   constructor(private router: Router) {}
+
   searchCars(officeId: string, startDate: string, endDate: string): void {
+    this.searchError = '';
     if (!officeId || !startDate || !endDate) {
+      this.searchError = 'Selecciona una oficina y completa las fechas.*';
+      return;
+    }
+    const today = new Date().toISOString().split('T')[0];
+
+    if (startDate < today) {
+      this.searchError = 'La fecha de recogida no puede ser anterior a hoy.*';
+      return;
+    }
+
+    if (endDate <= startDate) {
+      this.searchError = 'La fecha de devolución debe ser posterior a la fecha de recogida.*';
       return;
     }
 

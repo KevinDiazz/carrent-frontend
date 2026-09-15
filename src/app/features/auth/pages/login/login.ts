@@ -1,8 +1,8 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { ReactiveFormsModule, FormControl, FormGroup, Validators } from '@angular/forms';
 
 import { AuthService } from '../../services/auth';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   imports: [ReactiveFormsModule],
@@ -14,9 +14,12 @@ export class Login {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private route: ActivatedRoute,
   ) {}
 
-  isRegister = false;
+  isRegister = signal(false);
+  loginError = signal('');
+  registerError = signal('');
 
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
@@ -26,15 +29,24 @@ export class Login {
   registerForm = new FormGroup({
     name: new FormControl('', [Validators.required]),
     email: new FormControl('', [Validators.required, Validators.email]),
-    password: new FormControl('', [Validators.required]),
+    password: new FormControl('', [Validators.required, Validators.minLength(8)]),
   });
+  ngOnInit(): void {
+    this.route.queryParams.subscribe((params) => {
+      console.log('CAMBIO:', params);
+
+      this.isRegister.set(params['register'] === 'true');
+
+      console.log('isRegister:', this.isRegister);
+    });
+  }
 
   showRegister(): void {
-    this.isRegister = true;
+    this.isRegister.set(true);
   }
 
   showLogin(): void {
-    this.isRegister = false;
+    this.isRegister.set(false);
   }
 
   login(): void {
@@ -54,12 +66,14 @@ export class Login {
         this.router.navigate(['/']);
       },
       error: (error) => {
+        this.loginError.set('El email o la contraseña no son correctos.*');
         console.error('Error en login:', error);
       },
     });
   }
 
   register(): void {
+    this.registerError.set('');
     if (this.registerForm.invalid) {
       this.registerForm.markAllAsTouched();
       return;
@@ -77,10 +91,16 @@ export class Login {
         this.router.navigate(['/']);
         // Después de registrarse volvemos al login
         this.registerForm.reset();
-        this.isRegister = false;
+        this.isRegister.set(false);
       },
       error: (error) => {
         console.error('Error en registro:', error);
+        if (error.status === 409) {
+          this.registerError.set('Este email ya está registrado.');
+          return;
+        }
+
+        this.registerError.set('Ha ocurrido un error. Inténtalo de nuevo.');
       },
     });
   }
