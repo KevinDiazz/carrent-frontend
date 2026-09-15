@@ -131,7 +131,6 @@
       <div class="w-full max-w-md">
         <!-- Mobile logo -->
         <div class="flex flex-col items-center justify-center mb-10 lg:hidden">
-
           <img src="/images/logo-estandar.png" alt="CarRent" class="w-52 h-auto object-contain" />
         </div>
 
@@ -139,7 +138,7 @@
         <!-- LOGIN                                              -->
         <!-- ================================================= -->
 
-        @if (!isRegister) {
+        @if (!isRegister()) {
           <div class="auth-form">
             <!-- Header -->
             <div class="mb-8">
@@ -235,6 +234,11 @@
                 ) {
                   <p class="mt-2 text-sm text-red-600">La contraseña es obligatoria.</p>
                 }
+                @if (loginError()) {
+                  <p class="text-sm text-red-600 text-center mt-3">
+                    {{ loginError() }}
+                  </p>
+                }
               </div>
 
               <!-- Submit -->
@@ -267,7 +271,7 @@
         <!-- REGISTER                                           -->
         <!-- ================================================= -->
 
-        @if (isRegister) {
+        @if (isRegister()) {
           <div class="auth-form">
             <!-- Header -->
             <div class="mb-8">
@@ -408,6 +412,14 @@
                   registerForm.controls.password.hasError('required')
                 ) {
                   <p class="mt-2 text-sm text-red-600">La contraseña es obligatoria.</p>
+                }
+                @if (
+                  registerForm.controls.password.touched &&
+                  registerForm.controls.password.hasError('minlength')
+                ) {
+                  <p class="mt-2 text-sm text-red-600">
+                    La contraseña debe tener más de 6 caracteres.
+                  </p>
                 }
               </div>
 

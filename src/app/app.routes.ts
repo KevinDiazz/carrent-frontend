@@ -7,6 +7,7 @@ import { CarList } from './features/cars/pages/car-list/car-list';
 import { BookingConfirm } from './features/bookings/pages/booking-confirm/booking-confirm';
 import { BookingSuccess } from './features/bookings/pages/booking-success/booking-success';
 import { MyReservations } from './features/bookings/pages/my-reservations/my-reservations';
+import { authGuard } from './core/guards/auth.guard';
 export const routes: Routes = [
   {
     path: '',
@@ -36,6 +37,7 @@ export const routes: Routes = [
       {
         path: 'reservations',
         component: MyReservations,
+         canActivate: [authGuard]
       },
     ],
   },
