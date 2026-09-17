@@ -1,0 +1,27 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold text-gray-800">Dashboard</h1>
+
+  <p class="mt-2 text-gray-600">Resumen general de CarRent.</p>
+</div>
+
+<div class="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+  <div class="rounded-xl bg-white p-6 shadow-sm">
+    <p class="text-sm text-gray-500">Vehículos</p>
+    <p class="mt-2 text-3xl font-bold text-gray-800">{{ adminService.totalCars() }}</p>
+  </div>
+
+  <div class="rounded-xl bg-white p-6 shadow-sm">
+    <p class="text-sm text-gray-500">Modelos</p>
+    <p class="mt-2 text-3xl font-bold text-gray-800">{{ adminService.totalCarModels() }}</p>
+  </div>
+
+  <div class="rounded-xl bg-white p-6 shadow-sm">
+    <p class="text-sm text-gray-500">Oficinas</p>
+    <p class="mt-2 text-3xl font-bold text-gray-800">{{ adminService.totalOffices() }}</p>
+  </div>
+
+  <div class="rounded-xl bg-white p-6 shadow-sm">
+    <p class="text-sm text-gray-500">Reservas</p>
+    <p class="mt-2 text-3xl font-bold text-gray-800">{{ adminService.totalReservations() }}</p>
+  </div>
+</div>

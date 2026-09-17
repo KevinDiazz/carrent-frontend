@@ -1,0 +1,59 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold text-gray-800">
+    Modelos de vehículos
+  </h1>
+
+  <p class="mt-2 text-gray-600">
+    Gestiona las marcas y modelos disponibles en CarRent.
+  </p>
+</div>
+
+<div class="rounded-xl bg-white p-6 shadow-sm">
+
+  <div class="mb-6 flex items-center justify-between">
+    <h2 class="text-xl font-semibold text-gray-800">
+      Lista de modelos
+    </h2>
+
+    <button
+      class="rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
+    >
+      Añadir modelo
+    </button>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-sm text-gray-600">
+
+      <thead class="border-b bg-gray-50 text-xs uppercase text-gray-700">
+        <tr>
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Marca</th>
+          <th class="px-4 py-3">Modelo</th>
+          <th class="px-4 py-3">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        <tr class="border-b">
+          <td class="px-4 py-4">1</td>
+          <td class="px-4 py-4">Toyota</td>
+          <td class="px-4 py-4">Yaris</td>
+          <td class="px-4 py-4">
+            <div class="flex gap-2">
+              <button class="text-blue-600 hover:underline">
+                Editar
+              </button>
+
+              <button class="text-red-600 hover:underline">
+                Eliminar
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+
+    </table>
+  </div>
+
+</div>
