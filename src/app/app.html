@@ -8,8 +8,16 @@
       } @else {
         <div class="server-wake-spinner"></div>
         <p>{{ isWakingUp() ? 'Despertando el servidor…' : 'Conectando con el servidor…' }}</p>
-        <span>El servicio estaba inactivo, esto puede tardar unos segundos.</span>
+        <span>Este es un proyecto de portfolio alojado en un plan gratuito: el servidor se duerme tras un rato de inactividad y puede tardar varios minutos en volver a arrancar.</span>
       }
+      <a
+        class="server-wake-video-link"
+        href="https://www.youtube.com/watch?v=Z3fM00dWvZQ"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        ¿No quieres esperar? Mira la demo en vídeo
+      </a>
     </div>
   </div>
 } @else {
