@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
 import { environment } from '../../../../environments/environments';
-import { finalize, Observable, tap, ReplaySubject } from 'rxjs';
+import { finalize, Observable, tap, ReplaySubject, retry, timer, throwError } from 'rxjs';
 
 import { LoginRequest } from '../models/login-request.model';
 import { LoginResponse } from '../models/login-response.model';
@@ -15,6 +15,8 @@ export class AuthService {
   private currentUser = signal<LoginResponse | null>(null);
   private sessionRestored = signal(false);
   private sessionRestoredSubject = new ReplaySubject<void>();
+  private wakingUp = signal(false);
+  readonly isWakingUp = this.wakingUp.asReadonly();
   private readonly apiUrl = `${environment.apiUrl}/auth`;
   constructor(private http: HttpClient) {}
 
@@ -67,10 +69,26 @@ export class AuthService {
         },
       )
       .pipe(
+        retry({
+          count: 4,
+          delay: (error, retryCount) => {
+            const isColdStart =
+              error instanceof HttpErrorResponse &&
+              (error.status === 0 || error.status >= 502);
+
+            if (!isColdStart) {
+              return throwError(() => error);
+            }
+
+            this.wakingUp.set(true);
+            return timer(retryCount * 3000);
+          },
+        }),
         tap((response) => {
           this.currentUser.set(response);
         }),
         finalize(() => {
+          this.wakingUp.set(false);
           this.sessionRestored.set(true);
           this.sessionRestoredSubject.next();
         }),

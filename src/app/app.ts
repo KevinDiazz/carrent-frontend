@@ -10,8 +10,11 @@ import { AuthService } from './features/auth/services/auth';
 })
 export class App implements OnInit {
   protected readonly title = signal('carrent-frontend');
+  protected readonly isWakingUp: () => boolean;
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService) {
+    this.isWakingUp = this.authService.isWakingUp;
+  }
 
   ngOnInit(): void {
     this.authService.restoreSession().subscribe({
