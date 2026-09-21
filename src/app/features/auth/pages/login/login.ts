@@ -63,7 +63,8 @@ export class Login {
     this.authService.login(request).subscribe({
       next: (response) => {
         console.log('Login correcto:', response);
-        this.router.navigate(['/']);
+        const returnUrl = this.route.snapshot.queryParams['returnUrl'];
+        this.router.navigateByUrl(returnUrl ?? '/');
       },
       error: (error) => {
         this.loginError.set('El email o la contraseña no son correctos.*');

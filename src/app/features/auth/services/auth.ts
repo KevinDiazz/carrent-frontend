@@ -38,6 +38,10 @@ export class AuthService {
     return this.currentUser();
   }
 
+  isLoggedIn(): boolean {
+    return this.currentUser() !== null;
+  }
+
   logout(): Observable<void> {
     return this.http
       .post<void>(
