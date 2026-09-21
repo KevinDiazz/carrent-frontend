@@ -22,12 +22,15 @@
 
           <select
             id="officeId"
+            [class.border-red-500]="searchError"
             formControlName="officeId"
             class="w-full h-12 px-4 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
             <option value="">Selecciona una oficina</option>
-            <option value="1">Aeropuerto de Gran Canaria</option>
-            <option value="3">Oficina de Maspalomas</option>
+
+            @for (office of offices(); track office.id) {
+              <option [value]="office.id">{{ office.name }} - {{ office.city }}</option>
+            }
           </select>
         </div>
 
@@ -40,6 +43,7 @@
           <input
             id="startDate"
             type="date"
+            [class.border-red-500]="searchError"
             formControlName="startDate"
             class="w-full h-12 px-4 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
@@ -54,12 +58,17 @@
           <input
             id="endDate"
             type="date"
+            [class.border-red-500]="searchError"
             formControlName="endDate"
             class="w-full h-12 px-4 border border-gray-300 rounded-lg bg-white text-gray-900 focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
         </div>
       </div>
-
+      @if (searchError) {
+        <p class="mt-4 text-sm text-red-600 text-center">
+          {{ searchError }}
+        </p>
+      }
       <!-- Search button -->
       <div class="mt-6 flex justify-center">
         <button
@@ -343,6 +352,55 @@
           </div>
         </div>
       }
-    }
+    }@else if (hasSearched()) {
+  <!-- Estado sin resultados -->
+  <div
+    class="rounded-2xl border border-gray-200 bg-white px-6 py-12
+           text-center shadow-sm"
+  >
+    <div
+      class="mx-auto mb-5 flex h-16 w-16 items-center justify-center
+             rounded-full bg-blue-50"
+    >
+      <svg
+        class="h-8 w-8 text-blue-600"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="1.8"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          d="M8 16l-2 2m10-2l2 2M5 16h14l-1.5-6h-11L5 16zm3.5-6L10 6h4l1.5 4M7 16v2m10-2v2M3 13h2m14 0h2"
+        />
+      </svg>
+    </div>
+
+    <h2 class="text-2xl font-semibold text-gray-900">
+      No hay coches disponibles
+    </h2>
+
+    <p class="mx-auto mt-3 max-w-md text-gray-600">
+      No hemos encontrado coches disponibles para las fechas y la oficina
+      seleccionadas.
+    </p>
+
+    <p class="mt-2 text-sm text-gray-500">
+      Prueba a cambiar las fechas o seleccionar otra oficina.
+    </p>
+
+    <button
+      type="button"
+      (click)="searchForm.reset(); cars.set([]); searchError = ''; hasSearched.set(false);"
+      class="mt-6 rounded-lg bg-blue-600 px-6 py-3 font-semibold
+             text-white transition hover:bg-blue-700"
+    >
+      Modificar búsqueda
+    </button>
+  </div>
+}
   </div>
 </section>

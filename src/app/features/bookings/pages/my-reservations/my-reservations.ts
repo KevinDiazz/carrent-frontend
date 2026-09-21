@@ -1,16 +1,18 @@
-import { Component, OnInit, signal } from '@angular/core';
+import { Component, OnInit, signal,computed } from '@angular/core';
 import { ReservationService } from '../../services/reservation.service';
 import { ReservationResponse } from '../../models/reservation-response.model';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-my-reservations',
-  imports: [],
+  imports: [RouterLink],
   templateUrl: './my-reservations.html',
   styleUrl: './my-reservations.css',
 })
 export class MyReservations implements OnInit {
   reservations = signal<ReservationResponse[]>([]);
   reservationToCancel = signal<number | null>(null);
+    selectedTab = signal<'CONFIRMED' | 'CANCELLED'>('CONFIRMED');
   constructor(private reservationService: ReservationService) {}
 
   ngOnInit(): void {
@@ -53,4 +55,29 @@ export class MyReservations implements OnInit {
   closeCancelModal(): void {
     this.reservationToCancel.set(null);
   }
+
+
+  confirmedReservations = computed(() => {
+    return this.reservations()
+      .filter((reservation) => reservation.status === 'CONFIRMED')
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() -
+          new Date(b.startDate).getTime()
+      );
+  });
+
+  cancelledReservations = computed(() => {
+    return this.reservations()
+      .filter((reservation) => reservation.status === 'CANCELLED')
+      .sort(
+        (a, b) =>
+          new Date(a.startDate).getTime() -
+          new Date(b.startDate).getTime()
+      );
+  });
+  selectTab(tab: 'CONFIRMED' | 'CANCELLED'): void {
+    this.selectedTab.set(tab);
+  }
+
 }

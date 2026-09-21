@@ -12,10 +12,20 @@
         <a routerLink="/" class="text-gray-700 hover:text-blue-600 transition"> Inicio </a>
 
         <a routerLink="/cars" class="text-gray-700 hover:text-blue-600 transition"> Coches </a>
-
-        <a routerLink="/reservations" class="text-gray-700 hover:text-blue-600 transition">
-          Mis reservas
-        </a>
+        @if (currentUser) {
+          @if (currentUser.role === 'ADMIN') {
+            <a
+              routerLink="/admin"
+              class="hover:bg-blue-400 transition bg-blue-600 p-2 text-white rounded-xl"
+            >
+              Panel de administración
+            </a>
+          } @else {
+            <a routerLink="/reservations" class="text-gray-700 hover:text-blue-600 transition">
+              Mis reservas
+            </a>
+          }
+        }
       </div>
 
       <!-- Desktop authentication -->
@@ -33,12 +43,17 @@
             Cerrar sesión
           </button>
         } @else {
-          <a routerLink="/login" class="px-4 py-2 text-gray-700 hover:text-blue-600 transition">
+          <a
+            routerLink="/login"
+            [queryParams]="{ register: false }"
+            class="px-4 py-2 text-gray-700 hover:text-blue-600 transition"
+          >
             Iniciar sesión
           </a>
 
           <a
             routerLink="/login"
+            [queryParams]="{ register: true }"
             class="px-5 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
           >
             Registrarse
@@ -109,15 +124,15 @@
           >
             Coches
           </a>
-
-          <a
-            routerLink="/reservations"
-            class="px-3 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition"
-            (click)="closeMenu()"
-          >
-            Mis reservas
-          </a>
-
+          @if (currentUser) {
+            <a
+              routerLink="/reservations"
+              class="px-3 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition"
+              (click)="closeMenu()"
+            >
+              Mis reservas
+            </a>
+          }
           <div class="border-t border-gray-100 my-2"></div>
 
           @if (currentUser) {
@@ -135,6 +150,7 @@
           } @else {
             <a
               routerLink="/login"
+              [queryParams]="{ register: false }"
               class="px-3 py-3 text-gray-700 hover:bg-gray-50 hover:text-blue-600 rounded-lg transition"
               (click)="closeMenu()"
             >
@@ -142,7 +158,8 @@
             </a>
 
             <a
-              routerLink="/register"
+              routerLink="/login"
+              [queryParams]="{ register: true }"
               class="mt-1 px-3 py-3 text-center bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               (click)="closeMenu()"
             >

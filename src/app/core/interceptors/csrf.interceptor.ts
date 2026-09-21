@@ -16,15 +16,10 @@ export const csrfInterceptor: HttpInterceptorFn = (req, next) => {
 
   const csrfToken = getCsrfToken();
 
-  if (!csrfToken) {
-    return next(req);
-  }
-
-  const csrfReq = req.clone({
-    setHeaders: {
-      'X-XSRF-TOKEN': csrfToken
-    }
+  const withCreds = req.clone({
+    withCredentials: true,
+    ...(csrfToken ? { setHeaders: { 'X-XSRF-TOKEN': csrfToken } } : {})
   });
 
-  return next(csrfReq);
+  return next(withCreds);
 };

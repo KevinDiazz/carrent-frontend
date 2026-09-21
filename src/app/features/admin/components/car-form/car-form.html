@@ -1,0 +1,197 @@
+<div class="rounded-xl bg-white p-6 shadow-sm">
+  <div class="mb-6 flex items-center justify-between">
+    <h2 class="text-xl font-semibold text-gray-800">Añadir vehículo</h2>
+
+    <button
+      type="button"
+      class="text-gray-500 transition hover:text-gray-800"
+      (click)="cancelled.emit()"
+    >
+      ✕
+    </button>
+  </div>
+
+  <form [formGroup]="carForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 gap-5 md:grid-cols-2">
+    <!-- Modelo -->
+    <div>
+      <label for="carModelId" class="mb-2 block text-sm font-medium text-gray-700"> Modelo </label>
+
+      <select
+        id="carModelId"
+        formControlName="carModelId"
+        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      >
+        <option [ngValue]="0">Selecciona un modelo</option>
+
+        @for (carModel of carModels(); track carModel.id) {
+          <option [ngValue]="carModel.id">{{ carModel.brand }} {{ carModel.model }}</option>
+        }
+      </select>
+
+      @if (carForm.controls.carModelId.invalid && carForm.controls.carModelId.touched) {
+        <p class="mt-1 text-sm text-red-600">Selecciona un modelo válido.</p>
+      }
+    </div>
+
+    <!-- Oficina -->
+    <div>
+      <label for="officeId" class="mb-2 block text-sm font-medium text-gray-700"> Oficina </label>
+
+      <select
+        id="officeId"
+        formControlName="officeId"
+        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      >
+        <option [ngValue]="0">Selecciona una oficina</option>
+
+        @for (office of offices(); track office.id) {
+          <option [ngValue]="office.id">{{ office.name }} — {{ office.city }}</option>
+        }
+      </select>
+
+      @if (carForm.controls.officeId.invalid && carForm.controls.officeId.touched) {
+        <p class="mt-1 text-sm text-red-600">Selecciona una oficina válida.</p>
+      }
+    </div>
+
+    <!-- Año -->
+    <div>
+      <label for="year" class="mb-2 block text-sm font-medium text-gray-700"> Año </label>
+
+      <input
+        id="year"
+        type="number"
+        formControlName="year"
+        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      />
+    </div>
+
+    <!-- Matrícula -->
+    <div>
+      <label for="licensePlate" class="mb-2 block text-sm font-medium text-gray-700">
+        Matrícula
+      </label>
+
+      <input
+        id="licensePlate"
+        type="text"
+        formControlName="licensePlate"
+        placeholder="Ej. 1234 ABC"
+        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 uppercase outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      />
+
+      @if (
+        carForm.controls.licensePlate.hasError('required') && carForm.controls.licensePlate.touched
+      ) {
+        <p class="mt-1 text-sm text-red-600">La matrícula es obligatoria.</p>
+      } @else if (
+        carForm.controls.licensePlate.hasError('pattern') && carForm.controls.licensePlate.touched
+      ) {
+        <p class="mt-1 text-sm text-red-600">Introduce una matrícula válida. Ejemplo: 1122ABY.</p>
+      } @else if (carForm.controls.licensePlate.hasError('licensePlateTaken')) {
+        <p class="mt-1 text-sm text-red-600">Esta matrícula ya está registrada.</p>
+      }
+    </div>
+
+    <!-- Combustible -->
+    <div>
+      <label for="fuelType" class="mb-2 block text-sm font-medium text-gray-700">
+        Combustible
+      </label>
+
+      <select
+        id="fuelType"
+        formControlName="fuelType"
+        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      >
+        <option value="">Selecciona el combustible</option>
+        <option value="GASOLINE">Gasolina</option>
+        <option value="HYBRID">Híbrido</option>
+        <option value="ELECTRIC">Eléctrico</option>
+      </select>
+    </div>
+
+    <!-- Transmisión -->
+    <div>
+      <label for="transmission" class="mb-2 block text-sm font-medium text-gray-700">
+        Transmisión
+      </label>
+
+      <select
+        id="transmission"
+        formControlName="transmission"
+        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      >
+        <option value="">Selecciona la transmisión</option>
+        <option value="MANUAL">Manual</option>
+        <option value="AUTOMATIC">Automático</option>
+      </select>
+    </div>
+
+    <!-- Precio por día -->
+    <div>
+      <label for="pricePerDay" class="mb-2 block text-sm font-medium text-gray-700">
+        Precio por día (€)
+      </label>
+
+      <input
+        id="pricePerDay"
+        type="number"
+        formControlName="pricePerDay"
+        placeholder="Ej. 45.00"
+        step="0.01"
+        min="0.01"
+        class="w-full rounded-lg border border-gray-300 px-4 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      />
+
+      @if (carForm.controls.pricePerDay.invalid && carForm.controls.pricePerDay.touched) {
+        <p class="mt-1 text-sm text-red-600">El precio debe ser mayor que 0.</p>
+      }
+    </div>
+
+    <!-- Estado -->
+    <div>
+      <label for="status" class="mb-2 block text-sm font-medium text-gray-700"> Estado </label>
+
+      <select
+        id="status"
+        formControlName="status"
+        class="w-full rounded-lg border border-gray-300 bg-white px-4 py-2.5 outline-none transition focus:border-blue-500 focus:ring-2 focus:ring-blue-200"
+      >
+        @for (status of carStatuses; track status) {
+          <option [value]="status">
+            @switch (status) {
+              @case ('AVAILABLE') {
+                Disponible
+              }
+              @case ('UNAVAILABLE') {
+                No disponible
+              }
+              @case ('MAINTENANCE') {
+                Mantenimiento
+              }
+            }
+          </option>
+        }
+      </select>
+    </div>
+
+    <!-- Botones -->
+    <div class="flex justify-end gap-3 border-t border-gray-200 pt-5 md:col-span-2">
+      <button
+        type="button"
+        (click)="cancelled.emit()"
+        class="rounded-lg border border-gray-300 px-5 py-2.5 text-gray-700 transition hover:bg-gray-50"
+      >
+        Cancelar
+      </button>
+
+      <button
+        type="submit"
+        class="w-full rounded-lg bg-blue-600 px-5 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 sm:w-auto"
+      >
+        {{ carToEdit() ? 'Guardar cambios' : 'Añadir vehículo' }}
+      </button>
+    </div>
+  </form>
+</div>

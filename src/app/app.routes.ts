@@ -7,6 +7,9 @@ import { CarList } from './features/cars/pages/car-list/car-list';
 import { BookingConfirm } from './features/bookings/pages/booking-confirm/booking-confirm';
 import { BookingSuccess } from './features/bookings/pages/booking-success/booking-success';
 import { MyReservations } from './features/bookings/pages/my-reservations/my-reservations';
+import { authGuard } from './core/guards/auth.guard';
+import { AdminLayout } from './layout/admin-layout/admin-layout';
+import { adminGuard } from './core/guards/admin-guard.guard';
 export const routes: Routes = [
   {
     path: '',
@@ -36,6 +39,38 @@ export const routes: Routes = [
       {
         path: 'reservations',
         component: MyReservations,
+        canActivate: [authGuard],
+      },
+    ],
+  },
+  {
+    path: 'admin',
+    component: AdminLayout,
+    canActivate: [adminGuard],
+    children: [
+      {
+        path: '',
+        loadComponent: () =>
+          import('./features/admin/pages/dashboard/dashboard').then((m) => m.Dashboard),
+      },
+      {
+        path: 'cars',
+        loadComponent: () => import('./features/admin/pages/cars/cars').then((m) => m.Cars),
+      },
+      {
+        path: 'car-models',
+        loadComponent: () =>
+          import('./features/admin/pages/car-models/car-models').then((m) => m.CarModels),
+      },
+      {
+        path: 'offices',
+        loadComponent: () =>
+          import('./features/admin/pages/offices/offices').then((m) => m.Offices),
+      },
+      {
+        path: 'reservations',
+        loadComponent: () =>
+          import('./features/admin/pages/reservations/reservations').then((m) => m.Reservations),
       },
     ],
   },

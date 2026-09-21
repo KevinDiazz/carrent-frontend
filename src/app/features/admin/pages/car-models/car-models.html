@@ -1,0 +1,92 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold text-gray-800">
+    Modelos de vehículos
+  </h1>
+
+  <p class="mt-2 text-gray-600">
+    Gestiona las marcas y modelos disponibles en CarRent.
+  </p>
+</div>
+
+<!-- Formulario de creación o edición -->
+@if (showForm()) {
+  <div class="mb-6">
+    <app-car-model-form
+      [carModelToEdit]="carModelToEdit()"
+      (saved)="onSaved()"
+      (cancelled)="closeForm()"
+    />
+  </div>
+}
+
+<div class="rounded-xl bg-white p-6 shadow-sm">
+  <div
+    class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <h2 class="text-xl font-semibold text-gray-800">
+      Lista de modelos
+    </h2>
+
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <input
+        type="text"
+        placeholder="Buscar marca o modelo..."
+        class="rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        [value]="searchTerm()"
+        (input)="searchTerm.set($any($event.target).value)"
+      />
+
+      <button
+        type="button"
+        (click)="openForm()"
+        class="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
+      >
+        Añadir modelo
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla con scroll -->
+  <div class="max-h-[calc(100vh-260px)] overflow-auto">
+    <table class="w-full min-w-[650px] text-left text-sm text-gray-600">
+      <thead
+        class="sticky top-0 z-10 border-b bg-gray-50 text-xs uppercase text-gray-700"
+      >
+        <tr>
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Marca</th>
+          <th class="px-4 py-3">Modelo</th>
+          <th class="px-4 py-3">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (carModel of filteredCarModels(); track carModel.id) {
+          <tr class="border-b">
+            <td class="px-4 py-4">
+              {{ carModel.id }}
+            </td>
+
+            <td class="px-4 py-4 font-medium text-gray-800">
+              {{ carModel.brand }}
+            </td>
+
+            <td class="px-4 py-4">
+              {{ carModel.model }}
+            </td>
+
+            <td class="px-4 py-4">
+              <button
+                type="button"
+                (click)="editCarModel(carModel)"
+                class="cursor-pointer text-blue-600 hover:underline"
+              >
+                Editar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -4,6 +4,8 @@ import { AvailableCarCard } from '../../../../shared/components/available-car-ca
 import { CarAvailability } from '../../models/car-availability.model';
 import { CarService } from '../../services/car.service';
 import { ActivatedRoute } from '@angular/router';
+import { OfficeService } from '../../../offices/services/office.service';
+import { OfficeResponse } from '../../../offices/models/office-response.model';
 
 @Component({
   imports: [ReactiveFormsModule, AvailableCarCard],
@@ -16,6 +18,7 @@ export class CarList implements OnInit {
   fuelFilter = signal<string>('');
   transmissionFilter = signal<string>('');
   sortPrice = signal<string>('');
+  offices = signal<OfficeResponse[]>([]);
   pickupTime!: string;
   returnTime!: string;
   searchForm = new FormGroup({
@@ -24,11 +27,23 @@ export class CarList implements OnInit {
     endDate: new FormControl('', Validators.required),
   });
   filtersOpen = signal(false);
+  searchError: string = '';
+  hasSearched = signal(false);
   constructor(
     private carService: CarService,
     private route: ActivatedRoute,
+    private officeService: OfficeService,
   ) {}
   ngOnInit(): void {
+    this.officeService.getOffices().subscribe({
+      next: (offices) => {
+        this.offices.set(offices);
+      },
+      error: (error) => {
+        console.error('Error al cargar las oficinas:', error);
+      },
+    });
+
     this.route.queryParams.subscribe((params) => {
       const officeId = params['officeId'];
       const startDate = params['startDate'];
@@ -38,7 +53,6 @@ export class CarList implements OnInit {
       if (!officeId || !startDate || !endDate) {
         return;
       }
-
       this.searchForm.patchValue({
         officeId,
         startDate,
@@ -72,17 +86,42 @@ export class CarList implements OnInit {
   });
 
   searchCars(): void {
-    if (this.searchForm.invalid) {
+    this.searchError = '';
+
+    const officeId = this.searchForm.value.officeId;
+    const startDate = this.searchForm.value.startDate;
+    const endDate = this.searchForm.value.endDate;
+
+    if (!officeId || !startDate || !endDate) {
       this.searchForm.markAllAsTouched();
+      this.searchError = 'Selecciona una oficina y completa las fechas.*';
       return;
     }
+    const today = new Date().toISOString().split('T')[0];
 
-    const officeId = Number(this.searchForm.value.officeId);
-    const startDate = this.searchForm.value.startDate!;
-    const endDate = this.searchForm.value.endDate!;
+    if (startDate < today) {
+      this.searchError = 'La fecha de recogida no puede ser anterior a hoy.*';
+      return;
+    }
+    if (endDate <= startDate) {
+      this.searchError = 'La fecha de devolución debe ser posterior a la fecha de recogida.*';
+      return;
+    }
+    const officeIdNumber = Number(officeId);
+
     this.pickupTime = '09:00';
     this.returnTime = '21:00';
-    this.carService.getAvailableCars(startDate, endDate, officeId).subscribe({
+    this.hasSearched.set(true);
+
+    this.carService.getAvailableCars(startDate, endDate, officeIdNumber).subscribe({
+      next: (cars) => {
+        this.cars.set(cars);
+      },
+      error: (error) => {
+        console.error('ERROR:', error);
+      },
+    });
+    this.carService.getAvailableCars(startDate, endDate, officeIdNumber).subscribe({
       next: (cars) => {
         this.cars.set(cars);
       },

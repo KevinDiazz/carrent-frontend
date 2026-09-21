@@ -1,0 +1,142 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold text-gray-800">Vehículos</h1>
+
+  <p class="mt-2 text-gray-600">
+    Gestiona los vehículos disponibles en CarRent.
+  </p>
+</div>
+
+<!-- Formulario de creación o edición -->
+@if (showForm()) {
+  <div class="mb-6">
+    <app-car-form
+      [carModels]="carModels()"
+      [offices]="offices()"
+      [carToEdit]="carToEdit()"
+      (carCreated)="onCarCreated()"
+      (cancelled)="closeForm()"
+    />
+  </div>
+}
+
+<div class="rounded-xl bg-white p-6 shadow-sm">
+  <div
+    class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <h2 class="text-xl font-semibold text-gray-800">
+      Lista de vehículos
+    </h2>
+
+    <div class="flex flex-col gap-3 sm:flex-row">
+      <input
+        type="text"
+        placeholder="Buscar por matrícula..."
+        class="rounded-lg border border-gray-300 px-4 py-2 text-sm focus:border-blue-500 focus:outline-none focus:ring-1 focus:ring-blue-500"
+        [value]="searchLicensePlate()"
+        (input)="searchLicensePlate.set($any($event.target).value)"
+      />
+
+      <button
+        type="button"
+        (click)="openForm()"
+        class="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
+      >
+        Añadir vehículo
+      </button>
+    </div>
+  </div>
+
+  <!-- Tabla con scroll vertical y horizontal -->
+  <div class="max-h-[calc(100vh-260px)] overflow-auto">
+    <table class="w-full min-w-[850px] text-left text-sm text-gray-600">
+      <thead
+        class="sticky top-0 z-10 border-b bg-gray-50 text-xs uppercase text-gray-700"
+      >
+        <tr>
+          <th class="px-4 py-3">Matrícula</th>
+          <th class="px-4 py-3">Marca</th>
+          <th class="px-4 py-3">Modelo</th>
+          <th class="px-4 py-3">Combustible</th>
+          <th class="px-4 py-3">Estado</th>
+          <th class="px-4 py-3">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (car of filteredCars(); track car.id) {
+          <tr class="border-b">
+            <td class="px-4 py-4 font-bold">
+              {{ car.licensePlate }}
+            </td>
+
+            <td class="px-4 py-4">
+              {{ car.brand }}
+            </td>
+
+            <td class="px-4 py-4">
+              {{ car.model }}
+            </td>
+
+            <td class="px-4 py-4">
+              @switch (car.fuelType) {
+                @case ('ELECTRIC') {
+                  Eléctrico
+                }
+
+                @case ('GASOLINE') {
+                  Gasolina
+                }
+
+                @case ('HYBRID') {
+                  Híbrido
+                }
+
+                @default {
+                  {{ car.fuelType }}
+                }
+              }
+            </td>
+
+            <td class="px-4 py-4">
+              @switch (car.status) {
+                @case ('AVAILABLE') {
+                  <span
+                    class="rounded-full bg-green-100 px-3 py-1 text-xs font-medium text-green-700"
+                  >
+                    DISPONIBLE
+                  </span>
+                }
+
+                @case ('UNAVAILABLE') {
+                  <span
+                    class="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700"
+                  >
+                    NO DISPONIBLE
+                  </span>
+                }
+
+                @case ('MAINTENANCE') {
+                  <span
+                    class="rounded-full bg-yellow-100 px-3 py-1 text-xs font-medium text-yellow-700"
+                  >
+                    MANTENIMIENTO
+                  </span>
+                }
+              }
+            </td>
+
+            <td class="px-4 py-4">
+              <button
+                type="button"
+                (click)="editCar(car)"
+                class="cursor-pointer text-blue-600 hover:underline"
+              >
+                Editar
+              </button>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>

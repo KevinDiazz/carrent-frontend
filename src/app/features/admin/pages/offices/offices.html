@@ -1,0 +1,98 @@
+<div class="mb-8">
+  <h1 class="text-3xl font-bold text-gray-800">Oficinas</h1>
+
+  <p class="mt-2 text-gray-600">Gestiona las oficinas de alquiler de CarRent.</p>
+</div>
+
+@if (showForm()) {
+  <div class="mb-6">
+    <app-office-form
+      [officeToEdit]="officeToEdit()"
+      (saved)="onSaved()"
+      (cancelled)="closeForm()"
+    />
+  </div>
+}
+
+<div class="rounded-xl bg-white p-6 shadow-sm">
+  <div class="mb-6 flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
+    <h2 class="text-xl font-semibold text-gray-800">Lista de oficinas</h2>
+
+    <button
+      type="button"
+      (click)="openForm()"
+      class="rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
+    >
+      Añadir oficina
+    </button>
+  </div>
+
+  <div class="mb-6">
+    <input
+      type="search"
+      [value]="searchTerm()"
+      (input)="searchTerm.set($any($event.target).value)"
+      placeholder="Buscar por nombre, dirección, ciudad o teléfono..."
+      class="w-full rounded-lg border border-gray-300 px-4 py-2 text-gray-800 focus:border-blue-500 focus:outline-none"
+    />
+  </div>
+
+  <div class="max-h-[calc(100vh-300px)] overflow-auto">
+    <table class="min-w-[850px] w-full text-left text-sm text-gray-600">
+      <thead class="sticky top-0 border-b bg-gray-50 text-xs uppercase text-gray-700">
+        <tr>
+          <th class="px-4 py-3">ID</th>
+          <th class="px-4 py-3">Nombre</th>
+          <th class="px-4 py-3">Dirección</th>
+          <th class="px-4 py-3">Ciudad</th>
+          <th class="px-4 py-3">Teléfono</th>
+          <th class="px-4 py-3">Acciones</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        @for (office of filteredOffices(); track office.id) {
+          <tr class="border-b transition hover:bg-gray-50">
+            <td class="px-4 py-4">
+              {{ office.id }}
+            </td>
+
+            <td class="px-4 py-4 font-medium text-gray-800">
+              {{ office.name }}
+            </td>
+
+            <td class="px-4 py-4">
+              {{ office.address }}
+            </td>
+
+            <td class="px-4 py-4">
+              {{ office.city }}
+            </td>
+
+            <td class="px-4 py-4">
+              {{ office.phone }}
+            </td>
+
+            <td class="px-4 py-4">
+              <div class="flex gap-3">
+                <button
+                  type="button"
+                  (click)="editOffice(office)"
+                  class="text-blue-600 hover:underline"
+                >
+                  Editar
+                </button>
+              </div>
+            </td>
+          </tr>
+        } @empty {
+          <tr>
+            <td colspan="6" class="px-4 py-8 text-center text-gray-500">
+              No se encontraron oficinas.
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+</div>
