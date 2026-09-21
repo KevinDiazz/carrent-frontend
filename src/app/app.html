@@ -1,1 +1,11 @@
+@if (isWakingUp()) {
+  <div class="server-wake-overlay">
+    <div class="server-wake-box">
+      <div class="server-wake-spinner"></div>
+      <p>Despertando el servidor…</p>
+      <span>El servicio estaba inactivo, esto puede tardar unos segundos.</span>
+    </div>
+  </div>
+}
+
 <router-outlet />
