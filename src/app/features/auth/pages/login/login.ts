@@ -33,11 +33,7 @@ export class Login {
   });
   ngOnInit(): void {
     this.route.queryParams.subscribe((params) => {
-      console.log('CAMBIO:', params);
-
       this.isRegister.set(params['register'] === 'true');
-
-      console.log('isRegister:', this.isRegister);
     });
   }
 
@@ -61,8 +57,7 @@ export class Login {
     };
 
     this.authService.login(request).subscribe({
-      next: (response) => {
-        console.log('Login correcto:', response);
+      next: () => {
         const returnUrl = this.route.snapshot.queryParams['returnUrl'];
         this.router.navigateByUrl(returnUrl ?? '/');
       },
@@ -87,8 +82,7 @@ export class Login {
     };
 
     this.authService.register(request).subscribe({
-      next: (response) => {
-        console.log('Registro correcto:', response);
+      next: () => {
         this.router.navigate(['/']);
         // Después de registrarse volvemos al login
         this.registerForm.reset();

@@ -25,7 +25,6 @@ export class Navbar {
   }
 
   get currentUser() {
-  console.log('NAVBAR USER:', this.authService.getCurrentUser());
     return this.authService.getCurrentUser();
   }
 

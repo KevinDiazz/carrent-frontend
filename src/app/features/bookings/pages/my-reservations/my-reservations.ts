@@ -23,7 +23,6 @@ export class MyReservations implements OnInit {
     this.reservationService.getReservations().subscribe({
       next: (reservations) => {
         this.reservations.set(reservations);
-        console.log('Mis reservas:', reservations);
       },
       error: (error) => {
         console.error('Error al obtener las reservas:', error);
@@ -39,8 +38,6 @@ export class MyReservations implements OnInit {
 
     this.reservationService.cancelReservation(id).subscribe({
       next: () => {
-        console.log('Reserva cancelada:', id);
-
         this.reservationToCancel.set(null);
         this.loadReservations();
       },

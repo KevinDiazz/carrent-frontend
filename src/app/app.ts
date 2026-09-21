@@ -47,12 +47,7 @@ export class App implements OnInit {
 
   private restoreSession(): void {
     this.authService.restoreSession().subscribe({
-      next: (user) => {
-        console.log('Sesión restaurada:', user);
-      },
-      error: () => {
-        console.log('No hay sesión activa');
-      },
+      error: () => {},
     });
   }
 }

@@ -20,9 +20,6 @@ export class Register {
     };
 
     this.authService.register(request).subscribe({
-      next: (response) => {
-        console.log('Registro correcto:', response);
-      },
       error: (error) => {
         console.error('Error en registro:', error);
       },

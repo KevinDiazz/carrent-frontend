@@ -52,7 +52,6 @@ export class AdminService {
   loadTotalOffices(): void {
     this.officeService.getOffices().subscribe({
       next: (offices) => {
-        console.log(offices.length);
         this.totalOffices.set(offices.length);
       },
       error: (error) => {

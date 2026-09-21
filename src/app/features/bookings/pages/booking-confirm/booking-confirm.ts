@@ -50,11 +50,9 @@ export class BookingConfirm implements OnInit {
       pickupTime: this.bookingData.pickupTime,
       returnTime: this.bookingData.returnTime,
     };
-    console.log(request)
 
     this.reservationService.createReservation(request).subscribe({
       next: (reservation) => {
-        console.log('Reserva creada:', reservation);
         this.router.navigate(['/booking/success'], {
           state: {
             reservation,
