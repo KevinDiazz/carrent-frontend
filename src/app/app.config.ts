@@ -4,6 +4,7 @@ import { provideHttpClient, withInterceptors, withXsrfConfiguration } from '@ang
 import { routes } from './app.routes';
 import { authInterceptor } from './core/interceptors/auth.interceptor';
 import { csrfInterceptor } from './core/interceptors/csrf.interceptor';
+import { coldStartInterceptor } from './core/interceptors/cold-start.interceptor';
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -15,7 +16,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideHttpClient(
-      withInterceptors([authInterceptor, csrfInterceptor]),
+      withInterceptors([authInterceptor, csrfInterceptor, coldStartInterceptor]),
       withXsrfConfiguration({
         cookieName: 'XSRF-TOKEN',
         headerName: 'X-XSRF-TOKEN',
