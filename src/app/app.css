@@ -19,7 +19,7 @@
   background: #ffffff;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   text-align: center;
-  max-width: 320px;
+  max-width: 340px;
 }
 
 .server-wake-box p {
@@ -63,4 +63,19 @@
 
 .server-wake-retry:hover {
   background: #2563eb;
+}
+
+.server-wake-video-link {
+  margin-top: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #eee;
+  width: 100%;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #3b82f6;
+  text-decoration: none;
+}
+
+.server-wake-video-link:hover {
+  text-decoration: underline;
 }
