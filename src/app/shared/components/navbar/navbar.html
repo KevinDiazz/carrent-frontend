@@ -13,9 +13,18 @@
 
         <a routerLink="/cars" class="text-gray-700 hover:text-blue-600 transition"> Coches </a>
         @if (currentUser) {
-          <a routerLink="/reservations" class="text-gray-700 hover:text-blue-600 transition">
-            Mis reservas
-          </a>
+          @if (currentUser.role === 'ADMIN') {
+            <a
+              routerLink="/admin"
+              class="hover:bg-blue-400 transition bg-blue-600 p-2 text-white rounded-xl"
+            >
+              Panel de administración
+            </a>
+          } @else {
+            <a routerLink="/reservations" class="text-gray-700 hover:text-blue-600 transition">
+              Mis reservas
+            </a>
+          }
         }
       </div>
 

@@ -1,6 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable, signal } from '@angular/core';
-
+import { environment } from '../../../../environments/environments';
 import { finalize, Observable, tap, ReplaySubject } from 'rxjs';
 
 import { LoginRequest } from '../models/login-request.model';
@@ -15,11 +15,12 @@ export class AuthService {
   private currentUser = signal<LoginResponse | null>(null);
   private sessionRestored = signal(false);
   private sessionRestoredSubject = new ReplaySubject<void>();
+  private readonly apiUrl = `${environment.apiUrl}/auth`;
   constructor(private http: HttpClient) {}
 
   login(request: LoginRequest): Observable<LoginResponse> {
     return this.http
-      .post<LoginResponse>('http://localhost:8080/auth/login', request, {
+      .post<LoginResponse>( `${this.apiUrl}/login`, request, {
         withCredentials: true,
       })
       .pipe(
@@ -30,7 +31,7 @@ export class AuthService {
   }
 
   register(request: RegisterRequest): Observable<RegisterResponse> {
-    return this.http.post<RegisterResponse>('http://localhost:8080/auth/register', request);
+    return this.http.post<RegisterResponse>( `${this.apiUrl}/register`, request);
   }
 
   getCurrentUser(): LoginResponse | null {
@@ -40,7 +41,7 @@ export class AuthService {
   logout(): Observable<void> {
     return this.http
       .post<void>(
-        'http://localhost:8080/auth/logout',
+         `${this.apiUrl}/logout`,
         {},
         {
           withCredentials: true,
@@ -55,7 +56,7 @@ export class AuthService {
   restoreSession(): Observable<LoginResponse> {
     return this.http
       .post<LoginResponse>(
-        'http://localhost:8080/auth/refresh',
+        `${this.apiUrl}/refresh`,
         {},
         {
           withCredentials: true,

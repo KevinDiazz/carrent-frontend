@@ -1,22 +1,31 @@
 <div class="mb-8">
   <h1 class="text-3xl font-bold text-gray-800">Vehículos</h1>
 
-  <p class="mt-2 text-gray-600">Gestiona los vehículos disponibles en CarRent.</p>
+  <p class="mt-2 text-gray-600">
+    Gestiona los vehículos disponibles en CarRent.
+  </p>
 </div>
+
+<!-- Formulario de creación o edición -->
 @if (showForm()) {
   <div class="mb-6">
     <app-car-form
-      (cancelled)="closeForm()"
-      (carCreated)="onCarCreated()"
       [carModels]="carModels()"
       [offices]="offices()"
       [carToEdit]="carToEdit()"
+      (carCreated)="onCarCreated()"
+      (cancelled)="closeForm()"
     />
   </div>
 }
+
 <div class="rounded-xl bg-white p-6 shadow-sm">
-  <div class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-    <h2 class="text-xl font-semibold text-gray-800">Lista de vehículos</h2>
+  <div
+    class="mb-6 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+  >
+    <h2 class="text-xl font-semibold text-gray-800">
+      Lista de vehículos
+    </h2>
 
     <div class="flex flex-col gap-3 sm:flex-row">
       <input
@@ -28,17 +37,21 @@
       />
 
       <button
+        type="button"
         (click)="openForm()"
-        class="rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700 cursor-pointer"
+        class="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-white transition hover:bg-blue-700"
       >
         Añadir vehículo
       </button>
     </div>
   </div>
 
-  <div class="overflow-x-auto">
-    <table class="w-full text-left text-sm text-gray-600">
-      <thead class="border-b bg-gray-50 text-xs uppercase text-gray-700">
+  <!-- Tabla con scroll vertical y horizontal -->
+  <div class="max-h-[calc(100vh-260px)] overflow-auto">
+    <table class="w-full min-w-[850px] text-left text-sm text-gray-600">
+      <thead
+        class="sticky top-0 z-10 border-b bg-gray-50 text-xs uppercase text-gray-700"
+      >
         <tr>
           <th class="px-4 py-3">Matrícula</th>
           <th class="px-4 py-3">Marca</th>
@@ -52,22 +65,32 @@
       <tbody>
         @for (car of filteredCars(); track car.id) {
           <tr class="border-b">
-            <td class="px-4 py-4 font-bold">{{ car.licensePlate }}</td>
+            <td class="px-4 py-4 font-bold">
+              {{ car.licensePlate }}
+            </td>
 
-            <td class="px-4 py-4">{{ car.brand }}</td>
+            <td class="px-4 py-4">
+              {{ car.brand }}
+            </td>
 
-            <td class="px-4 py-4">{{ car.model }}</td>
+            <td class="px-4 py-4">
+              {{ car.model }}
+            </td>
+
             <td class="px-4 py-4">
               @switch (car.fuelType) {
-                @case ('PETROL') {
-                  Gasolina
+                @case ('ELECTRIC') {
+                  Eléctrico
                 }
+
                 @case ('GASOLINE') {
                   Gasolina
                 }
+
                 @case ('HYBRID') {
                   Híbrido
                 }
+
                 @default {
                   {{ car.fuelType }}
                 }
@@ -85,7 +108,9 @@
                 }
 
                 @case ('UNAVAILABLE') {
-                  <span class="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700">
+                  <span
+                    class="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700"
+                  >
                     NO DISPONIBLE
                   </span>
                 }
@@ -101,11 +126,13 @@
             </td>
 
             <td class="px-4 py-4">
-              <div class="flex gap-2">
-                <button (click)="editCar(car)" class="text-blue-600 hover:underline cursor-pointer">
-                  Editar
-                </button>
-              </div>
+              <button
+                type="button"
+                (click)="editCar(car)"
+                class="cursor-pointer text-blue-600 hover:underline"
+              >
+                Editar
+              </button>
             </td>
           </tr>
         }

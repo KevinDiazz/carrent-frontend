@@ -1,0 +1,99 @@
+<div class="rounded-xl bg-white p-6 shadow-sm">
+  <div class="mb-6 flex items-center justify-between">
+    <h2 class="text-xl font-semibold text-gray-800">
+      {{ isEditing ? 'Editar oficina' : 'Añadir oficina' }}
+    </h2>
+  </div>
+
+  @if (errorMessage) {
+    <div class="mb-4 rounded-lg bg-red-100 p-3 text-sm text-red-700">
+      {{ errorMessage }}
+    </div>
+  }
+
+  <form
+    [formGroup]="officeForm"
+    (ngSubmit)="onSubmit()"
+    class="grid grid-cols-1 gap-5 md:grid-cols-2"
+  >
+    <div>
+      <label for="name" class="mb-1 block text-sm font-medium text-gray-700"> Nombre </label>
+
+      <input
+        id="name"
+        type="text"
+        formControlName="name"
+        placeholder="Ej. Oficina principal"
+        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+      />
+
+      @if (officeForm.controls.name.touched && officeForm.controls.name.invalid) {
+        <p class="mt-1 text-sm text-red-600">El nombre es obligatorio.</p>
+      }
+    </div>
+
+    <div>
+      <label for="address" class="mb-1 block text-sm font-medium text-gray-700"> Dirección </label>
+
+      <input
+        id="address"
+        type="text"
+        formControlName="address"
+        placeholder="Ej. Calle Principal, 1"
+        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+      />
+
+      @if (officeForm.controls.address.touched && officeForm.controls.address.invalid) {
+        <p class="mt-1 text-sm text-red-600">La dirección es obligatoria.</p>
+      }
+    </div>
+
+    <div>
+      <label for="city" class="mb-1 block text-sm font-medium text-gray-700"> Ciudad </label>
+
+      <input
+        id="city"
+        type="text"
+        formControlName="city"
+        placeholder="Ej. La Aldea"
+        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+      />
+
+      @if (officeForm.controls.city.touched && officeForm.controls.city.invalid) {
+        <p class="mt-1 text-sm text-red-600">La ciudad es obligatoria.</p>
+      }
+    </div>
+
+    <div>
+      <label for="phone" class="mb-1 block text-sm font-medium text-gray-700"> Teléfono </label>
+
+      <input
+        id="phone"
+        type="tel"
+        formControlName="phone"
+        placeholder="Ej. 928000000"
+        class="w-full rounded-lg border border-gray-300 px-3 py-2 focus:border-blue-500 focus:outline-none"
+      />
+
+      @if (officeForm.controls.phone.touched && officeForm.controls.phone.invalid) {
+        <p class="mt-1 text-sm text-red-600">El teléfono es obligatorio.</p>
+      }
+    </div>
+
+    <div class="flex gap-3 md:col-span-2 justify-end">
+      <button
+        type="button"
+        (click)="onCancel()"
+       class="rounded-lg border border-gray-300 px-5 py-2.5 text-sm font-medium text-gray-700 transition hover:bg-gray-50"
+      >
+        Cancelar
+      </button>
+      <button
+        type="submit"
+        class="rounded-lg bg-blue-600 px-5 py-2 text-white transition hover:bg-blue-700"
+      >
+        {{ isEditing ? 'Guardar cambios' : 'Crear oficina' }}
+      </button>
+    </div>
+  </form>
+</div>

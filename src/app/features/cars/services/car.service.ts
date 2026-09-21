@@ -5,12 +5,12 @@ import { CarAvailability } from '../models/car-availability.model';
 import { CarResponse } from '../models/car-response.model';
 import { CarCreateRequest } from '../models/car-create-request.model';
 import { CarUpdateRequest } from '../models/car-updated-request.model';
-
+import { environment } from '../../../../environments/environments';
 @Injectable({
   providedIn: 'root',
 })
 export class CarService {
-  private apiUrl = 'http://localhost:8080/cars';
+  private readonly apiUrl = `${environment.apiUrl}/cars`;
 
   constructor(private http: HttpClient) {}
 
