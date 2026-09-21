@@ -1,11 +1,17 @@
-@if (isWakingUp()) {
+@if (!appReady()) {
   <div class="server-wake-overlay">
     <div class="server-wake-box">
-      <div class="server-wake-spinner"></div>
-      <p>Despertando el servidor…</p>
-      <span>El servicio estaba inactivo, esto puede tardar unos segundos.</span>
+      @if (appError()) {
+        <p>No se pudo conectar con el servidor</p>
+        <span>Comprueba tu conexión e inténtalo de nuevo en unos segundos.</span>
+        <button type="button" class="server-wake-retry" (click)="retry()">Reintentar</button>
+      } @else {
+        <div class="server-wake-spinner"></div>
+        <p>{{ isWakingUp() ? 'Despertando el servidor…' : 'Conectando con el servidor…' }}</p>
+        <span>El servicio estaba inactivo, esto puede tardar unos segundos.</span>
+      }
     </div>
   </div>
+} @else {
+  <router-outlet />
 }
-
-<router-outlet />
