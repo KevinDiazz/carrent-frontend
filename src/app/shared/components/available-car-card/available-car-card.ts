@@ -1,6 +1,7 @@
 import { Component, Input } from '@angular/core';
 import { CarAvailability } from '../../../features/cars/models/car-availability.model';
 import { Router } from '@angular/router';
+import { AuthService } from '../../../features/auth/services/auth';
 @Component({
   selector: 'app-available-car-card',
   imports: [],
@@ -25,7 +26,14 @@ export class AvailableCarCard {
   @Input({ required: true })
   returnTime!: string;
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService,
+  ) {}
+
+  isLoggedIn(): boolean {
+    return this.authService.isLoggedIn();
+  }
 
   getFuelTypeLabel(): string {
     const fuelTypes: Record<string, string> = {
@@ -47,6 +55,13 @@ export class AvailableCarCard {
   }
 
   reserve(): void {
+    if (!this.isLoggedIn()) {
+      this.router.navigate(['/login'], {
+        queryParams: { returnUrl: this.router.url },
+      });
+      return;
+    }
+
     this.router.navigate(['/booking/confirm'], {
       state: {
         booking: {
